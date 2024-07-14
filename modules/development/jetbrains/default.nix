@@ -6,16 +6,22 @@
     default = false;
   };
   config = lib.mkIf config.glitch.development.jetbrains.enable {
-    home-manager.users.glitch = { ... }: {
+    home-manager.users.glitch = 
+    { ... }: let
+#      hjdk = name: ".jdks/${name}".source = pkgs.${name};
+    in {
       home.packages = with pkgs; [ (symlinkJoin {
-    name = "idea-ultimate";
-    paths = [ jetbrains.idea-ultimate ];
-    buildInputs = [ makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/idea-ultimate \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libpulseaudio libGL glfw openal stdenv.cc.cc.lib udev gamemode.lib libusb1]}"
-    '';
-  }) ];
+        name = "idea-ultimate";
+        paths = [ jetbrains.idea-ultimate ];
+        buildInputs = [ makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/idea-ultimate \
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libpulseaudio libGL glfw openal stdenv.cc.cc.lib udev gamemode.lib libusb1]}"
+        '';
+      }) ];
+     
+      home.file.".jdks/openjdk8".source = "${pkgs.jdk8}/lib/openjdk";
+      home.file.".jdks/openjdk17".source = pkgs.jdk17;
     };
     programs.java.enable = true;
   };

@@ -18,7 +18,7 @@
   glitch.development.jetbrains.enable = true;
   glitch.development.neovim.enable = true;
    networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
+  madness.enable = true;
   # Set your time zone.
   time.timeZone = "America/Chicago";
   services.displayManager.enable = true;

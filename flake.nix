@@ -8,15 +8,25 @@
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    fenix = { url = "github:nix-community/fenix"; inputs.nixpkgs.follows = "nixpkgs"; };
     home-manager = { url = "github:nix-community/home-manager"; inputs.nixpkgs.follows = "nixpkgs"; };
     lanzaboote = { url = "github:nix-community/lanzaboote"; inputs.nixpkgs.follows = "nixpkgs"; };
     neovim-nightly-overlay = { 
       url = "github:nix-community/neovim-nightly-overlay"; inputs.nixpkgs.follows = "nixpkgs";
     };
+        lix = {
+      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+      flake = false;
+    };
+
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.lix.follows = "lix";
+    };
+    madness.url = "github:antithesishq/madness";
   };
 
-  outputs = inputs@{ self, nixpkgs, agenix, fenix, home-manager, lanzaboote, ... 
+  outputs = inputs@{ self, nixpkgs,  ... 
   }: let
     inherit (self) outputs;
     nixosSystem = system: name:
@@ -25,10 +35,12 @@
         specialArgs = { inherit inputs outputs; };
         modules = commonModules ++ [ ./machines/${name} ({...}: { networking.hostName = name; })];
       };
-    commonModules = [
+    commonModules = with inputs; [
       agenix.nixosModules.age
       home-manager.nixosModule
       lanzaboote.nixosModules.lanzaboote
+      lix-module.nixosModules.default
+      madness.nixosModules.madness
       ./modules
     ];  
   in
@@ -37,7 +49,7 @@
       lich = nixosSystem "x86_64-linux" "lich";
     };
     overlays = [
-      fenix.overlays.default
+      #fenix.overlays.default
     ];
   };
 }

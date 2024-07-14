@@ -4,29 +4,15 @@ let
   #palette = config.my.colors.palette;
   nvimDir = "${config.glitch.dotDir}/modules/development/neovim";
 
-  rustToolchain = pkgs.fenix.complete.withComponents [
-    "cargo"
-    "clippy"  
-    "rust-src"
-    "rustc"
-    "rustfmt"
-    "rust-analyzer"
-  ];
+#  rustToolchain = pkgs.fenix.complete.withComponents [
+#    "cargo"
+#    "clippy"  
+#    "rust-src"
+#    "rustc"
+#    "rustfmt"
+#    "rust-analyzer"
+#  ];
   ld_library_path_var_name = (lib.optionalString pkgs.stdenv.isDarwin "DY") + "LD_LIBRARY_PATH";
-
-  nvimPackage = pkgs.symlinkJoin {
-    name = "neovim-with-ld-path";
-    paths = [ inputs.neovim-nightly-overlay.packages.${pkgs.system}.default ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/nvim --prefix ${ld_library_path_var_name} : "${
-        pkgs.lib.makeLibraryPath [
-          pkgs.libgit2
-          pkgs.gpgme  
-        ]
-      }"
-    '';
-  };
 in
 {
   options.glitch.development.neovim = {
@@ -38,10 +24,10 @@ in
     home-manager.users.glitch = { config, lib, ... }: {
     config = { programs.neovim = {
         enable = true;
-        package = nvimPackage;
+        package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
         defaultEditor = true;
         extraPackages = with pkgs; [
-          rustToolchain
+#          rustToolchain
           
           cmake
           gnumake
