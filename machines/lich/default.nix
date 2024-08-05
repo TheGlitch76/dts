@@ -15,6 +15,7 @@
   glitch.stateVersion = "24.05";
   glitch.dotDir = "/home/glitch/dot2";
   glitch.graphical.enable = true;
+#  glitch.graphical.discord.enable = false;
   glitch.development.jetbrains.enable = true;
   glitch.development.neovim.enable = true;
    networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.

@@ -33,20 +33,25 @@
       nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs outputs; };
-        modules = commonModules ++ [ ./machines/${name} ({...}: { networking.hostName = name; })];
+        modules = commonNixosModules ++ [ ./machines/${name} ({...}: { networking.hostName = name; })];
       };
-    commonModules = with inputs; [
+    commonNixosModules = with inputs; [
       agenix.nixosModules.age
       home-manager.nixosModule
       lanzaboote.nixosModules.lanzaboote
       lix-module.nixosModules.default
       madness.nixosModules.madness
-      ./modules
+      ./modules/nixos
     ];  
   in
   {
     nixosConfigurations = {
       lich = nixosSystem "x86_64-linux" "lich";
+    };
+    homeConfigurations.glitch = inputs.home-manager.lib.homeManagerConfiguration {
+      system = "aarch64-darwin";
+      extraSpecialArgs = { inherit inputs outputs; };
+      modules = [ ./machines/shadesmar-fedora ./modules/home ];
     };
     overlays = [
       #fenix.overlays.default

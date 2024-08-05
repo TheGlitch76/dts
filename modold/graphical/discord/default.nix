@@ -1,3 +1,4 @@
+# https://github.com/sersorrel/sys/blob/main/hm/discord/default.nix
 { config, lib, pkgs, ... }:
 
 let

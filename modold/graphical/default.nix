@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... } : {
   imports = [
+    ./composition
     ./discord
   ];
   
@@ -9,6 +10,7 @@
     glitch = {
       graphical = {
         discord.enable = lib.mkDefault true;
+        composition.enable = lib.mkDefault true;
       };
     };
 
