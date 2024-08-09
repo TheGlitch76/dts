@@ -1,12 +1,15 @@
 { config, lib, pkgs, ... }:
 
 let base= ({
+  });
+in
+{
   programs.zsh = {
     enable = true;
     autocd = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true; #what is this?
-    
+
     plugins = [
       {
         name = "powerlevel10k";
@@ -20,13 +23,11 @@ let base= ({
       }
     ];
   };
-});
-in
-{
-  home-manager.users.glitch = { ... }: (base);
-  home-manager.users.root = { ... }: (base);
-  users.defaultUserShell = pkgs.zsh;
-  environment.shells = [ pkgs.zsh ];
-  environment.pathsToLink = [ "/share/zsh" ];
-  programs.zsh.enable = true;  
+
+  #home-manager.users.glitch = { ... }: (base);
+  #home-manager.users.root = { ... }: (base);
+  #users.defaultUserShell = pkgs.zsh;
+  #environment.shells = [ pkgs.zsh ];
+  #environment.pathsToLink = [ "/share/zsh" ];
+  #programs.zsh.enable = true;
 }

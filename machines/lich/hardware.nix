@@ -9,7 +9,7 @@
     pkgs.sbctl # for secure boot
     # for graphical stuff
   ];
-  environment.variables = { MESA_LOADER_DRIVER_OVERRIDE = "zink"; };
+  environment.variables = { MESA_LOADER_DRIVER_OVERRIDE = "zink"; MOZ_ENABLE_WAYLAND = "0";  };
 
   hardware = {   
     graphics = {

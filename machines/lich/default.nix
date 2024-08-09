@@ -12,7 +12,6 @@
       ./hardware.nix
     ];
   boot.supportedFilesystems = [ "ntfs" ];
-  glitch.stateVersion = "24.05";
   glitch.dotDir = "/home/glitch/dot2";
   glitch.graphical.enable = true;
 #  glitch.graphical.discord.enable = false;
@@ -34,10 +33,7 @@
   ];
 
   home-manager.users.glitch = { ... }: {
-    fonts.fontconfig.enable = true;
-    home.packages = [
-     (pkgs.nerdfonts.override { fonts = [ "Meslo" ]; })
-    ];
+
   };
   # Enable CUPS to print documents.
   services.printing.enable = true;

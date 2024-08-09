@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... } : {
   imports = [
     ./jetbrains
-    ./neovim
+    ./emacs
+#    ./neovim
   ];
 
   options.glitch.development.enable = lib.mkEnableOption "development settings";
