@@ -3,7 +3,7 @@
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
-    ./zsh
+#    ./zsh
   ];
   options.glitch = {};
   config = {

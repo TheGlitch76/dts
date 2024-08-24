@@ -28,15 +28,10 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-      flake = false;
-    };
-
     lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.lix.follows = "lix";
+#      inputs.lix.follows = "lix";
     };
     madness.url = "github:antithesishq/madness";
   };
@@ -48,29 +43,35 @@
       nixosSystem =
         system: name:
         nixpkgs.lib.nixosSystem {
-          inherit system stateVersion;
+          inherit system;
           specialArgs = {
             inherit inputs outputs;
           };
           modules = commonNixosModules ++ [
-            ./machines/${name}
             (
               { ... }:
               {
                 networking.hostName = name;
+                system.stateVersion = stateVersion;
+                home-manager.users.glitch = { ... }: { home.stateVersion = stateVersion; };
               }
             )
+            ./machines/${name}
           ];
         };
       commonNixosModules = with inputs; [
         agenix.nixosModules.age
-        home-manager.nixosModule
+        home-manager.nixosModule {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.glitch = import ./modules/home/default.nix;
+        }
         lanzaboote.nixosModules.lanzaboote
         lix-module.nixosModules.default
         madness.nixosModules.madness
         ./modules/nixos
       ];
-
+      
       stateVersion = "24.05";
     in
     {

@@ -12,11 +12,7 @@
       ./hardware.nix
     ];
   boot.supportedFilesystems = [ "ntfs" ];
-  glitch.dotDir = "/home/glitch/dot2";
-  glitch.graphical.enable = true;
-#  glitch.graphical.discord.enable = false;
-  glitch.development.jetbrains.enable = true;
-  glitch.development.neovim.enable = true;
+#  glitch.dotDir = "/home/glitch/dot2";
    networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   madness.enable = true;
   # Set your time zone.
@@ -33,7 +29,16 @@
   ];
 
   home-manager.users.glitch = { ... }: {
-
+    glitch = {
+      development = {
+        jetbrains.enable = true;
+      };
+      graphical.enable = true;
+      dotDir = "/home/glitch/dot2";
+    };
+    home.packages = with pkgs; [
+      firefox # TODO: come up with a better solution
+    ];
   };
   # Enable CUPS to print documents.
   services.printing.enable = true;
