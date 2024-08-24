@@ -31,6 +31,7 @@
   home-manager.users.glitch = { ... }: {
     glitch = {
       development = {
+        emacs.enable = true;
         jetbrains.enable = true;
       };
       graphical.enable = true;
