@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... } : {
   imports = [
     ./firefox
+    ./fonts
     ./spotify
   ];
   
@@ -10,6 +11,7 @@
     glitch = {
       graphical = {
         spotify.enable = lib.mkDefault true;
+        fonts.enable = lib.mkDefault true;
       };
     };
     home.packages = with pkgs; [
@@ -18,8 +20,6 @@
       audacity
       musescore
       gimp
-      (pkgs.nerdfonts.override { fonts = [ "Meslo" ]; })
     ];
-    fonts.fontconfig.enable = true;
   };
 }

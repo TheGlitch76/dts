@@ -7,6 +7,11 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
+      inputs.darwin.follows = "darwin";
+    };
+    darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     devshell = {
       url = "github:numtide/devshell";
@@ -24,10 +29,6 @@
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     lix-module = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -40,6 +41,17 @@
     inputs@{ self, nixpkgs, ... }:
     let
       inherit (self) outputs;
+      homeState = import ./modules/home/default.nix;
+      configureHome = {
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          users.glitch = import ./modules/home/default.nix;
+          extraSpecialArgs = {
+            inherit inputs outputs;
+          };
+        };
+      };
       nixosSystem =
         system: name:
         nixpkgs.lib.nixosSystem {
@@ -52,48 +64,62 @@
               { ... }:
               {
                 networking.hostName = name;
-                system.stateVersion = stateVersion;
-                home-manager.users.glitch = { ... }: { home.stateVersion = stateVersion; };
+                system.stateVersion = outputs.stateVersion;
               }
             )
             ./machines/${name}
           ];
         };
+
       commonNixosModules = with inputs; [
-        agenix.nixosModules.age
-        home-manager.nixosModule {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.glitch = import ./modules/home/default.nix;
-        }
+        agenix.nixosModules.default
+        home-manager.nixosModule configureHome
         lanzaboote.nixosModules.lanzaboote
         lix-module.nixosModules.default
         madness.nixosModules.madness
         ./modules/nixos
       ];
-      
-      stateVersion = "24.05";
+      commonDarwinModules = with inputs; [
+        agenix.darwinModules.default
+        home-manager.darwinModules.home-manager configureHome
+        ./modules/darwin
+      ];
+      darwinSystem = name: inputs.darwin.lib.darwinSystem {
+        system = "aarch64-darwin"; # ill probably never own an intel mac, right...?
+        specialArgs = {
+          inherit inputs outputs;
+        };
+        modules = commonDarwinModules ++ [
+          ./machines/${name}
+        ];
+      };
     in
     {
+      stateVersion = "24.05";
       nixosConfigurations = {
         lich = nixosSystem "x86_64-linux" "lich";
       };
-      homeConfigurations."glitch@shadesmar" = inputs.home-manager.lib.homeManagerConfiguration {
+      
+      darwinConfigurations = {
+        braize = darwinSystem "braize";
+      };
 
-        pkgs = nixpkgs.legacyPackages."aarch64-linux";
+      homeConfigurations."gliaaaatch" = inputs.home-manager.lib.homeManagerConfiguration {
+
+        pkgs = nixpkgs.legacyPackages."aarch64-darwin";
         extraSpecialArgs = {
           inherit inputs outputs;
         };
         modules = [
-          ./machines/shadesmar-fedora
+          ./machines/braize
           ./modules/home
           (
             { ... }:
             {
               home = {
-                inherit stateVersion;
+                stateVersion = outputs.stateVersion;
                 username = "glitch";
-                homeDirectory = "/home/glitch";
+                homeDirectory = "/Users/glitch";
               };
               nixpkgs.overlays = self.overlays;
             }
