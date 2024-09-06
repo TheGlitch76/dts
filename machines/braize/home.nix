@@ -18,6 +18,7 @@
 
   home.packages = with pkgs; [
     prismlauncher
+    jetbrains.gateway
   ];
   programs.home-manager.enable = true;
   # makes home-manager update .profile so that applicatons show up in the DE
