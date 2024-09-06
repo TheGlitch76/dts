@@ -35,6 +35,10 @@
 #      inputs.lix.follows = "lix";
     };
     madness.url = "github:antithesishq/madness";
+    nixos-wsl = {
+      url = "github:nix-community/nixos-wsl/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -65,9 +69,10 @@
               {
                 networking.hostName = name;
                 system.stateVersion = outputs.stateVersion;
+                home-manager.users.glitch = import ./machines/${name}/home.nix;
               }
             )
-            ./machines/${name}
+            ./machines/${name}/nixos.nix
           ];
         };
 
@@ -98,6 +103,7 @@
       stateVersion = "24.05";
       nixosConfigurations = {
         lich = nixosSystem "x86_64-linux" "lich";
+        lich-wsl = nixosSystem "x86_64-linux" "lich-wsl";
       };
       
       darwinConfigurations = {

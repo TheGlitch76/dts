@@ -43,7 +43,8 @@
   };
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
+  services.openssh.enable = true;
+  services.openssh.settings.PasswordAuthentication = false;
   security.rtkit.enable = true;
    services.pipewire = {
      enable = true;

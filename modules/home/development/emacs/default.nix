@@ -1,6 +1,6 @@
 { lib, config, pkgs, ... }:
 let
-  emacs-pkg = with pkgs; (emacsPackagesFor (if config.glitch.isDarwin then emacs-gtk else emacs-pgtk)).emacsWithPackages (epkgs: with epkgs; [ vterm ]);
+  emacs-pkg = with pkgs; (emacsPackagesFor (emacs29-pgtk)).emacsWithPackages (epkgs: with epkgs; [ vterm ]);
   thisDir = "${config.glitch.dotDir}/modules/home/development/emacs";
 in {
   options.glitch.development.emacs.enable = lib.mkEnableOption "emacs";
