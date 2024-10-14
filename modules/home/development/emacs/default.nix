@@ -28,6 +28,7 @@ in {
       rustup
       # javascript (ew!)
       nodejs
+      yarn
       typescript
       typescript-language-server
     ];

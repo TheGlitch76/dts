@@ -9,7 +9,7 @@
     nixpkgs.config.allowUnfree = true; # free software is for losers
     nixpkgs.overlays = outputs.overlays;
     nix = {
-      registry.nixpkgs.flake = inputs.nixpkgs;
+#      registry.nixpkgs.flake = inputs.nixpkgs;
       nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
       settings = {
         experimental-features = [ "nix-command" "flakes" ];

@@ -8,7 +8,7 @@
       spotify.enable = false;
       # DRM :(
       firefox.enable = false;
-      # fix later lol
+
       fonts.enable = true;
     };
     development = {
