@@ -3,7 +3,7 @@
   
   config = lib.mkIf config.glitch.graphical.fonts.enable {
     home.packages = with pkgs; [
-      (pkgs.nerdfonts.override { fonts = [ "Meslo" ]; })
+      pkgs.nerd-fonts.meslo-lg
     ];
     fonts.fontconfig.enable = true;
   };

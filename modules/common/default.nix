@@ -11,9 +11,9 @@
     nix = {
 #      registry.nixpkgs.flake = inputs.nixpkgs;
       nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+      optimise.automatic = true;
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
-        auto-optimise-store = true;
         substituters = [
           "https://cache.nixos.org"
           "https://accentor.cachix.org"

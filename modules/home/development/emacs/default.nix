@@ -31,12 +31,16 @@ in {
       yarn
       typescript
       typescript-language-server
+      # spellcheck
+      (aspellWithDicts (d: with d; [
+        en
+        en-computers
+        en-science
+      ]))
     ];
-  #  home.file.".doom.d" = lib.mkIf config.glitch.isDarwin {
- #     source = config.lib.file.mkOutOfStoreSymlink "${thisDir}/doom";
-#    };
     xdg.configFile = {
       "doom".source = config.lib.file.mkOutOfStoreSymlink "${thisDir}/doom/";
     };
+    home.sessionPath = [ "\${xdg.configHome}/emacs/bin/" ];
   };
 }
