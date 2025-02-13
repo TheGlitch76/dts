@@ -32,8 +32,9 @@
     lix-module = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
-#      inputs.lix.follows = "lix";
     };
+    # the flake.nix for mac-app-util seems to imply they want to use their own nixpkgs
+    mac-app-util.url = "github:hraban/mac-app-util";
     madness.url = "github:antithesishq/madness";
     nixos-wsl = {
       url = "github:nix-community/nixos-wsl/main";
@@ -45,12 +46,20 @@
     inputs@{ self, nixpkgs, ... }:
     let
       inherit (self) outputs;
-      homeState = import ./modules/home/default.nix;
       configureHome = {
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
           users.glitch = import ./modules/home/default.nix;
+          # TODO: this is a little jank...
+          sharedModules = commonHomeManagerModules ++ [ (
+            { ... }:
+            {
+             # TODO: move stateVersion out of the outputs
+             home.stateVersion = outputs.stateVersion;
+            }
+          )
+          ];
           extraSpecialArgs = {
             inherit inputs outputs;
           };
@@ -87,7 +96,11 @@
       commonDarwinModules = with inputs; [
         agenix.darwinModules.default
         home-manager.darwinModules.home-manager configureHome
+        mac-app-util.darwinModules.default
         ./modules/darwin
+      ];
+      commonHomeManagerModules = with inputs; [
+        mac-app-util.homeManagerModules.default
       ];
       darwinSystem = name: inputs.darwin.lib.darwinSystem {
         system = "aarch64-darwin"; # ill probably never own an intel mac, right...?
@@ -108,29 +121,6 @@
       
       darwinConfigurations = {
         braize = darwinSystem "braize";
-      };
-
-      homeConfigurations."gliaaaatch" = inputs.home-manager.lib.homeManagerConfiguration {
-
-        pkgs = nixpkgs.legacyPackages."aarch64-darwin";
-        extraSpecialArgs = {
-          inherit inputs outputs;
-        };
-        modules = [
-          ./machines/braize
-          ./modules/home
-          (
-            { ... }:
-            {
-              home = {
-                stateVersion = outputs.stateVersion;
-                username = "glitch";
-                homeDirectory = "/Users/glitch";
-              };
-              nixpkgs.overlays = self.overlays;
-            }
-          )
-        ];
       };
       overlays = [ inputs.emacs-overlay.overlays.default ];
     };

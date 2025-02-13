@@ -37,10 +37,18 @@ in {
         en-computers
         en-science
       ]))
+      # cc
+      clang-tools
+      #clang
+      #gcc
+      #bear
+      #cmake
+      #llvmPackages.libcxx
     ];
+
     xdg.configFile = {
       "doom".source = config.lib.file.mkOutOfStoreSymlink "${thisDir}/doom/";
     };
-    home.sessionPath = [ "\${xdg.configHome}/emacs/bin/" ];
+    home.sessionPath = [ "${config.xdg.configHome}/emacs/bin/" ];
   };
 }

@@ -12,6 +12,7 @@
       fonts.enable = true;
     };
     development = {
+      enable = true;
       emacs.enable = true;
     };
   };

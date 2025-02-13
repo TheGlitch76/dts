@@ -10,6 +10,7 @@
   config = {
     nixpkgs.config.allowUnfree = true;
     home.stateVersion = outputs.stateVersion;
+    xdg.enable = true;
   };
 #  nixpkgs.config.allowUnsupportedSystem = true;
 }
