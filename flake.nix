@@ -84,6 +84,18 @@
             ./machines/${name}/nixos.nix
           ];
         };
+      darwinSystem = name: inputs.darwin.lib.darwinSystem {
+        system = "aarch64-darwin"; # ill probably never own an intel mac, right...?
+        specialArgs = {
+          inherit inputs outputs;
+        };
+        modules = commonDarwinModules ++ [
+          {
+            home-manager.users.glitch = import ./machines/${name}/home.nix;
+          }
+          ./machines/${name}/darwin.nix
+        ];
+      };
 
       commonNixosModules = with inputs; [
         agenix.nixosModules.default
@@ -102,23 +114,13 @@
       commonHomeManagerModules = with inputs; [
         mac-app-util.homeManagerModules.default
       ];
-      darwinSystem = name: inputs.darwin.lib.darwinSystem {
-        system = "aarch64-darwin"; # ill probably never own an intel mac, right...?
-        specialArgs = {
-          inherit inputs outputs;
-        };
-        modules = commonDarwinModules ++ [
-          ./machines/${name}
-        ];
-      };
-    in
+   in
     {
       stateVersion = "24.05";
       nixosConfigurations = {
         lich = nixosSystem "x86_64-linux" "lich";
         lich-wsl = nixosSystem "x86_64-linux" "lich-wsl";
       };
-      
       darwinConfigurations = {
         braize = darwinSystem "braize";
       };
