@@ -99,7 +99,7 @@
 
       commonNixosModules = with inputs; [
         agenix.nixosModules.default
-        home-manager.nixosModule configureHome
+        home-manager.nixosModules.home-manager configureHome
         lanzaboote.nixosModules.lanzaboote
         lix-module.nixosModules.default
         madness.nixosModules.madness
