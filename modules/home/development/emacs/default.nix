@@ -39,6 +39,7 @@ in {
       ]))
       # cc
       clang-tools
+      # jdt-language-server
       #clang
       #gcc
       #bear

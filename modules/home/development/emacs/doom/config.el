@@ -80,3 +80,5 @@
   (setq evil-colemak-basics-layout-mod 'mod-dh)
   :config
   (global-evil-colemak-basics-mode))
+; I think explicit is what I want, so that plugins still use bash
+(setq explicit-shell-file-name "/etc/profiles/per-user/glitch/bin/fish")

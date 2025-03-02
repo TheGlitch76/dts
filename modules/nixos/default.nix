@@ -4,7 +4,6 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ../common
-#    ./zsh
   ];
   options.glitch = {};
   config = {
@@ -19,14 +18,12 @@
       useXkbConfig = true; # does this cause problems on headless systems? i hope not!
     };
 
-    programs.zsh.enable = true;
     users = {
 # TODO: configure pw with age
 #      mutableUsers = false;
       users.glitch = {
         isNormalUser = true;
         extraGroups = [ "wheel"];
-        shell = pkgs.zsh;
       };
     };
   };

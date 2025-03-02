@@ -3,8 +3,6 @@
     ../common
   ];
   config = {
-      # blindly copied from nix-darwin default config
-    programs.zsh.enable = true;
     system = {
 #      configurationRevision = self.rev or self.dirtyRev or null;
       stateVersion = 4;

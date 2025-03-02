@@ -6,6 +6,10 @@
     home-manager.useGlobalPkgs = true;
     # nix (the package manager) configuration
     environment.systemPackages = [ pkgs.git ];
+    programs = {
+      fish.enable = true;
+#      nushell.enable = true; # just here for fun
+    };
     nixpkgs.config.allowUnfree = true; # free software is for losers
     nixpkgs.overlays = outputs.overlays;
     nix = {

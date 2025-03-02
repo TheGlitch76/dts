@@ -2,7 +2,7 @@
   imports = [
     ./development
     ./graphical
-    ./zsh
+    ./shells
   ];
 
   options.glitch.dotDir = lib.mkOption {};
