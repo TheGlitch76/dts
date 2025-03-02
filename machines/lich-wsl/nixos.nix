@@ -20,5 +20,11 @@
     enable = true;
     useRoutingFeatures = "both";
   };
-  home-manager.users.glitch = import ./home.nix;
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
 }

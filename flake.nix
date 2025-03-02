@@ -101,7 +101,7 @@
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager configureHome
         lanzaboote.nixosModules.lanzaboote
-        lix-module.nixosModules.default
+#        lix-module.nixosModules.default
         madness.nixosModules.madness
         ./modules/nixos
       ];

@@ -9,5 +9,8 @@
       emacs.enable = true;
       jetbrains.enable = true;
     };
+    graphical = {
+      fonts.enable = true;
+    };
   };
 }
