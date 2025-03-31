@@ -1,23 +1,30 @@
-{ inputs, outputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  options.glitch = {};
+  options.glitch = { };
   config = {
     home-manager.useGlobalPkgs = true;
-    # nix (the package manager) configuration
     environment.systemPackages = [ pkgs.git ];
     programs = {
       fish.enable = true;
-#      nushell.enable = true; # just here for fun
+      #      nushell.enable = true; # just here for fun
     };
     nixpkgs.config.allowUnfree = true; # free software is for losers
-    nixpkgs.overlays = outputs.overlays;
     nix = {
-#      registry.nixpkgs.flake = inputs.nixpkgs;
       nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
       optimise.automatic = true;
       settings = {
-        experimental-features = [ "nix-command" "flakes" ];
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
         substituters = [
           "https://cache.nixos.org"
           "https://accentor.cachix.org"
@@ -31,7 +38,6 @@
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
         trusted-users = [ "@wheel" ];
-
       };
     };
   };

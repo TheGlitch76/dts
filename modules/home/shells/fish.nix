@@ -5,8 +5,12 @@
       enable = true;
       interactiveShellInit = ''
         set fish_greeting # disable greeting
-
       '';
+      shellAbbrs = {
+        nos = "nixos-rebuild switch --flake ${config.glitch.dotDir}";
+        nds = "darwin-rebuild switch --flake ${config.glitch.dotDir}";
+        nfu = "nix flake update";
+      };
     };
   };
 }

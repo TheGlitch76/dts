@@ -80,5 +80,9 @@
   (setq evil-colemak-basics-layout-mod 'mod-dh)
   :config
   (global-evil-colemak-basics-mode))
-; I think explicit is what I want, so that plugins still use bash
-(setq explicit-shell-file-name "/etc/profiles/per-user/glitch/bin/fish")
+; shell commands not in a vterm will still use bash/zsh/whatever
+; since i have a policy of only using a posix compat shell by default
+(setq vterm-shell "/etc/profiles/per-user/glitch/bin/fish")
+
+(setq org-latex-compiler "lualatex")
+(setq org-preview-latex-default-process 'dvisvgm)

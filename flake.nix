@@ -21,6 +21,9 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    flake-utils.url = "github:numtide/flake-utils";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,8 +58,7 @@
           sharedModules = commonHomeManagerModules ++ [ (
             { ... }:
             {
-             # TODO: move stateVersion out of the outputs
-             home.stateVersion = outputs.stateVersion;
+             home.stateVersion = stateVersion;
             }
           )
           ];
@@ -77,7 +79,10 @@
               { ... }:
               {
                 networking.hostName = name;
-                system.stateVersion = outputs.stateVersion;
+                system.stateVersion = stateVersion;
+
+                nixpkgs.overlays = overlays;
+
                 home-manager.users.glitch = import ./machines/${name}/home.nix;
               }
             )
@@ -114,8 +119,6 @@
       commonHomeManagerModules = with inputs; [
         mac-app-util.homeManagerModules.default
       ];
-   in
-    {
       stateVersion = "24.05";
       nixosConfigurations = {
         lich = nixosSystem "x86_64-linux" "lich";
@@ -124,6 +127,23 @@
       darwinConfigurations = {
         braize = darwinSystem "braize";
       };
-      overlays = [ inputs.emacs-overlay.overlays.default ];
-    };
+      overlays = with inputs; [
+          emacs-overlay.overlays.default
+          devshell.overlays.default
+        ];
+
+      lsShells = builtins.readDir ./shells;
+      shellFiles = builtins.filter (name: lsShells.${name} == "regular") (builtins.attrNames lsShells);
+      shellNames = builtins.map (filename: builtins.head (builtins.split "\\." filename)) shellFiles;
+      systemAttrs = inputs.flake-utils.lib.eachDefaultSystem (system:
+        let
+          pkgs = import nixpkgs {inherit overlays system; };
+          lib = pkgs.lib;
+          nameToValue = name: import (./shells + "/${name}.nix") {inherit lib pkgs inputs system; };
+        in
+          {
+            devShells = builtins.listToAttrs(builtins.map (name: {inherit name; value = nameToValue name;}) shellNames);
+          }
+      );
+    in systemAttrs // { inherit nixosConfigurations darwinConfigurations; };
 }

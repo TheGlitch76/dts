@@ -1,22 +1,57 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
-  emacs-pkg = with pkgs; (emacsPackagesFor (emacs29-pgtk)).emacsWithPackages (epkgs: with epkgs; [ vterm ]);
+  emacs-pkgs = with pkgs; [
+    binutils
+    ripgrep
+    gnutls
+    imagemagick
+    (aspellWithDicts (
+      d: with d; [
+        en
+        en-computers
+        en-science
+      ]
+    ))
+  ];
+  emacs-pkg =
+    with pkgs;
+    (emacsPackagesFor (emacs30-pgtk)).emacsWithPackages (
+      epkgs:
+      with epkgs;
+      [
+        vterm
+      ]
+      ++ emacs-pkgs
+    );
+  tex = (pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-basic
+      dvisvgm dvipng # for preview and export as html
+      wrapfig amsmath ulem hyperref capt-of fontspec etoolbox;
+  });
   thisDir = "${config.glitch.dotDir}/modules/home/development/emacs";
-in {
+in
+{
   options.glitch.development.emacs.enable = lib.mkEnableOption "emacs";
   config = lib.mkIf config.glitch.development.emacs.enable {
+    # this holds things that:
+    # - cant be wrapped into the emacs pkg because they're called thru a shell
+    #   (or something similar),
+    # - are too common to be used in a devshell
+    # - i am too lazy to put in a devshell
     home.packages = with pkgs; [
-      binutils
       emacs-pkg
-      # doom deps
-      git
-      ripgrep
-      gnutls
-      fd
-      imagemagick
+      # for some reason doom shits the bed if this is wrapped
       zstd
+      fd
+      tex
       # tools
       direnv
+      jj
       # sh
       shellcheck
       bash-language-server
@@ -26,25 +61,6 @@ in {
       nixfmt-rfc-style
       # rust
       rustup
-      # javascript (ew!)
-      nodejs
-      yarn
-      typescript
-      typescript-language-server
-      # spellcheck
-      (aspellWithDicts (d: with d; [
-        en
-        en-computers
-        en-science
-      ]))
-      # cc
-      clang-tools
-      # jdt-language-server
-      #clang
-      #gcc
-      #bear
-      #cmake
-      #llvmPackages.libcxx
     ];
 
     xdg.configFile = {
