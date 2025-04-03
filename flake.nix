@@ -128,9 +128,9 @@
         braize = darwinSystem "braize";
       };
       overlays = with inputs; [
-          emacs-overlay.overlays.default
-          devshell.overlays.default
-        ];
+        emacs-overlay.overlays.default
+        devshell.overlays.default
+      ];
 
       lsShells = builtins.readDir ./shells;
       shellFiles = builtins.filter (name: lsShells.${name} == "regular") (builtins.attrNames lsShells);
