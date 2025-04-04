@@ -74,15 +74,18 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-(use-package evil-colemak-basics
-  :after evil
-  :init
-  (setq evil-colemak-basics-layout-mod 'mod-dh)
-  :config
-  (global-evil-colemak-basics-mode))
+
 ; shell commands not in a vterm will still use bash/zsh/whatever
 ; since i have a policy of only using a posix compat shell by default
 (setq vterm-shell "/etc/profiles/per-user/glitch/bin/fish")
 
 (setq org-latex-compiler "lualatex")
 (setq org-preview-latex-default-process 'dvisvgm)
+
+;; Keyboard
+(load! "+colemak") ; taken almost directly from the closed PR but with dh copied in and applied
+; my personal fixes, made to match so i can contribute back if needed
+(map!
+ (:when (modulep! :tools lookup)
+   :nv "E" #'+lookup/documentation)
+ )
