@@ -10,6 +10,7 @@ let
     ripgrep
     gnutls
     imagemagick
+    python3
     (aspellWithDicts (
       d: with d; [
         en
@@ -20,7 +21,7 @@ let
   ];
   emacs-pkg =
     with pkgs;
-    (emacsPackagesFor (emacs30-pgtk)).emacsWithPackages (
+    (emacsPackagesFor (emacs-pgtk)).emacsWithPackages (
       epkgs:
       with epkgs;
       [

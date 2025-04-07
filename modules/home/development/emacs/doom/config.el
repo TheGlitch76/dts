@@ -89,3 +89,19 @@
  (:when (modulep! :tools lookup)
    :nv "E" #'+lookup/documentation)
  )
+;; direnv clobbers exec-path (which is appended by nix), this HACK preserves it
+(setenv "PATH" (mapconcat 'identity exec-path ":"))
+
+;; lsp-java sucks
+(after! lsp-java
+  (setq lsp-java-jdt-ls-prefer-native-command t)
+  (setq lsp-java-server-install-dir (getenv "JDTLS_PATH"))
+  (setq lsp-java-server-config-dir (expand-file-name "./jdtls-config" (getenv "XDG_CACHE_HOME")))
+
+  ; lsp-java has to be able to find the jar even if we tell it to not use it
+  ; https://github.com/emacs-lsp/lsp-java/issues/487#issuecomment-2383307915
+  (defun java-server-subdir-for-jar (orig &rest args)
+    (let ((lsp-java-server-install-dir
+           (expand-file-name "./share/java/jdtls" lsp-java-server-install-dir)))
+      (apply orig args)))
+  (advice-add 'lsp-java--locate-server-jar :around #'java-server-subdir-for-jar))

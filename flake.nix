@@ -128,7 +128,7 @@
         braize = darwinSystem "braize";
       };
       overlays = with inputs; [
-        emacs-overlay.overlays.default
+        #emacs-overlay.overlays.default
         devshell.overlays.default
       ];
 

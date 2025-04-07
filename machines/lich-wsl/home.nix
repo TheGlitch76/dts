@@ -13,4 +13,7 @@
       fonts.enable = true;
     };
   };
+  home.sessionVariables = {
+    COLORTERM = "truecolor"; # for emacs
+  };
 }
