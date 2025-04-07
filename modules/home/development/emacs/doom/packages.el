@@ -47,5 +47,3 @@
 ;; (unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
-
-(package! evil-colemak-basics :pin "ddea4486de929c399745713a6e616df50b22dedd")
