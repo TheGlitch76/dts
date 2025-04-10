@@ -97,6 +97,7 @@
         modules = commonDarwinModules ++ [
           {
             home-manager.users.glitch = import ./machines/${name}/home.nix;
+            nixpkgs.overlays = overlays;
           }
           ./machines/${name}/darwin.nix
         ];
@@ -128,7 +129,7 @@
         braize = darwinSystem "braize";
       };
       overlays = with inputs; [
-        #emacs-overlay.overlays.default
+        emacs-overlay.overlays.default
         devshell.overlays.default
       ];
 

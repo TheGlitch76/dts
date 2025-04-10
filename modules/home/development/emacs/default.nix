@@ -21,7 +21,7 @@ let
   ];
   emacs-pkg =
     with pkgs;
-    (emacsPackagesFor (emacs-pgtk)).emacsWithPackages (
+    (emacsPackagesFor (pkgs.emacs-git-pgtk)).emacsWithPackages (
       epkgs:
       with epkgs;
       [
