@@ -6,7 +6,10 @@
     dotDir = "/home/glitch/dts";
     development = {
       enable = true;
-      emacs.enable = true;
+      emacs = {
+        enable = true;
+        package = pkgs.emacs-git-nox;
+      };
       jetbrains.enable = true;
     };
     graphical = {

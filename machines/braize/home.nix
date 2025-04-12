@@ -13,7 +13,10 @@
     };
     development = {
       enable = true;
-      emacs.enable = true;
+      emacs = {
+        enable = true;
+        package = pkgs.emacs-unstable;
+      };
     };
   };
 

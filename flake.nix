@@ -146,5 +146,5 @@
             devShells = builtins.listToAttrs(builtins.map (name: {inherit name; value = nameToValue name;}) shellNames);
           }
       );
-    in systemAttrs // { inherit nixosConfigurations darwinConfigurations; };
+    in systemAttrs // { inherit nixosConfigurations darwinConfigurations shellNames; };
 }

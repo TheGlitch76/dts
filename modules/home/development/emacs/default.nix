@@ -19,9 +19,8 @@ let
       ]
     ))
   ];
-  emacs-pkg =
-    with pkgs;
-    (emacsPackagesFor (pkgs.emacs-git-pgtk)).emacsWithPackages (
+  generate-emacs-pkg = emacs:
+    (pkgs.emacsPackagesFor emacs).emacsWithPackages (
       epkgs:
       with epkgs;
       [
@@ -37,7 +36,10 @@ let
   thisDir = "${config.glitch.dotDir}/modules/home/development/emacs";
 in
 {
-  options.glitch.development.emacs.enable = lib.mkEnableOption "emacs";
+  options.glitch.development.emacs = {
+    enable = lib.mkEnableOption "emacs";
+    package = lib.mkOption {};
+  };
   config = lib.mkIf config.glitch.development.emacs.enable {
     # this holds things that:
     # - cant be wrapped into the emacs pkg because they're called thru a shell
@@ -45,7 +47,7 @@ in
     # - are too common to be used in a devshell
     # - i am too lazy to put in a devshell
     home.packages = with pkgs; [
-      emacs-pkg
+      (generate-emacs-pkg config.glitch.development.emacs.package)
       # for some reason doom shits the bed if this is wrapped
       zstd
       fd
@@ -68,5 +70,8 @@ in
       "doom".source = config.lib.file.mkOutOfStoreSymlink "${thisDir}/doom/";
     };
     home.sessionPath = [ "${config.xdg.configHome}/emacs/bin/" ];
+    home.sessionVariables = {
+      DOTFILES_DIR = config.glitch.dotDir;
+    };
   };
 }
