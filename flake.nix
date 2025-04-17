@@ -3,12 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.darwin.follows = "darwin";
-    };
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,6 +10,13 @@
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    dts-prv = {
+      # private flake
+      url = "git+ssh://git@github.com/theglitch76/dts-prv";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.darwin.follows = "darwin";
     };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
@@ -32,13 +33,12 @@
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lix-module = {
+    lix = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # the flake.nix for mac-app-util seems to imply they want to use their own nixpkgs
     mac-app-util.url = "github:hraban/mac-app-util";
-    madness.url = "github:antithesishq/madness";
     nixos-wsl = {
       url = "github:nix-community/nixos-wsl/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -104,21 +104,19 @@
       };
 
       commonNixosModules = with inputs; [
-        agenix.nixosModules.default
         home-manager.nixosModules.home-manager configureHome
         lanzaboote.nixosModules.lanzaboote
 #        lix-module.nixosModules.default
-        madness.nixosModules.madness
         ./modules/nixos
       ];
       commonDarwinModules = with inputs; [
-        agenix.darwinModules.default
         home-manager.darwinModules.home-manager configureHome
         mac-app-util.darwinModules.default
         ./modules/darwin
       ];
       commonHomeManagerModules = with inputs; [
         mac-app-util.homeManagerModules.default
+        dts-prv.homeManagerModules.default
       ];
       stateVersion = "24.05";
       nixosConfigurations = {
@@ -131,6 +129,7 @@
       overlays = with inputs; [
         emacs-overlay.overlays.default
         devshell.overlays.default
+        lix.overlays.lixFromNixpkgs
       ];
 
       lsShells = builtins.readDir ./shells;
