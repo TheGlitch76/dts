@@ -95,5 +95,4 @@
 (setenv "PATH" (mapconcat 'identity exec-path ":"))
 
 ;; Variables set by nix, used for envrc-init
-(setq glitch-dot-dir "/home/glitch/dts")
 (load! "envrc-init")

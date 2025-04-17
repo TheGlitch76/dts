@@ -1,9 +1,9 @@
 ;;; home/development/emacs/doom/envrc-init.el -*- lexical-binding: t; -*-
 ;; variable glitch-dot-dir should be the location of the nix flake (usually /home/glitch/dts or /Users/glitch/dts)
-
+(defcustom +envrc/init-flake-location (getenv "DOTFILES_DIR") "The location of the flake")
 (defun +envrc/init-flake ()
   (interactive)
-  (let ((flake (concat glitch-dot-dir "#")))
+  (let ((flake (concat +envrc/init-flake-location "#")))
    (with-temp-file (expand-file-name "./.envrc" (projectile-project-root))
       (insert "use_flake" flake (+envrc--ask-shell flake)))
     (message "initialized shell in %s" (expand-file-name "./.envrc" (projectile-project-root)))
@@ -18,7 +18,7 @@
       (+doom-call-process-no-err "nix" "eval" "--json" path)
     (if (zerop code)
         output
-      (user-error concat("Unable to read flake " path))))
+      (user-error (concat "Unable to read flake " path))))
    :array-type 'list))
 
 (defun +doom-call-process-no-err (command &rest args)
