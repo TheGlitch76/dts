@@ -14,6 +14,4 @@
   };
 
   programs.home-manager.enable = true;
-  # makes home-manager update .profile so that applicatons show up in the DE
-  programs.bash.enable = true;
 }

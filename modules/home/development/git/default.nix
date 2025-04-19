@@ -9,9 +9,15 @@ in {
       gitIdentity
       fzf
     ];
-    programs.git.aliases = rec {
-      identity = "! git-identity";
-      id = identity;
+    programs.git = {
+      aliases = rec {
+        identity = "! git-identity";
+        id = identity;
+      };
+      ignores = [
+        ".DS_STORE"
+        ".direnv"
+      ];
     };
   };
 }

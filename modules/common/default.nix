@@ -11,7 +11,8 @@
   options.glitch = { };
   config = {
     home-manager.useGlobalPkgs = true;
-    environment.systemPackages = [ pkgs.git ];
+    # packages so common i want them literally everywhere
+    environment.systemPackages = with pkgs; [ git ripgrep ];
     programs = {
       fish.enable = true;
       #      nushell.enable = true; # just here for fun
