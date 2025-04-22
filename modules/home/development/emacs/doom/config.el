@@ -92,7 +92,7 @@
    :nv "E" #'+lookup/documentation)
  )
 ;; direnv clobbers exec-path (which is appended by nix), this HACK preserves it
-(setenv "PATH" (mapconcat 'identity exec-path ":"))
+;;(setenv "PATH" (mapconcat 'identity exec-path ":"))
 
 ;; Variables set by nix, used for envrc-init
 (load! "envrc-init")

@@ -49,6 +49,19 @@
     inputs@{ self, nixpkgs, ... }:
     let
       inherit (self) outputs;
+      patches = builtins.map (patch: ./patches + "/${patch}") (builtins.filter (x: x != ".keep") (builtins.attrNames (builtins.readDir ./patches)));
+      # Avoid IFD if there are no patches
+      nixpkgsForSystem = system: if patches == [ ] then inputs.nixpkgs else
+      (
+        ((import inputs.nixpkgs { inherit system; }).pkgs.applyPatches {
+          inherit patches;
+          name = "nixpkgs-patched-${inputs.nixpkgs.shortRev}";
+          src = inputs.nixpkgs;
+        }).overrideAttrs (old: {
+          preferLocalBuild = false;
+          allowSubstitutes = true;
+        })
+      );
       configureHome = {
         home-manager = {
           useGlobalPkgs = true;
@@ -80,7 +93,7 @@
               {
                 networking.hostName = name;
                 system.stateVersion = stateVersion;
-
+                nixpkgs.pkgs = import nixpkgs;
                 nixpkgs.overlays = overlays;
 
                 home-manager.users.glitch = import ./machines/${name}/home.nix;
@@ -89,20 +102,28 @@
             ./machines/${name}/nixos.nix
           ];
         };
-      darwinSystem = name: inputs.darwin.lib.darwinSystem {
-        system = "aarch64-darwin"; # ill probably never own an intel mac, right...?
-        specialArgs = {
-          inherit inputs outputs;
-        };
-        modules = commonDarwinModules ++ [
-          {
-            home-manager.users.glitch = import ./machines/${name}/home.nix;
-            nixpkgs.overlays = overlays;
-          }
-          ./machines/${name}/darwin.nix
-        ];
-      };
-
+      darwinSystem = name:
+        let
+          system = "aarch64-darwin"; # ill probably never own an intel mac, right...?
+          nixpkgs = nixpkgsForSystem system;
+          lib = (import nixpkgs { inherit overlays system; }).lib;
+        in
+          inputs.darwin.lib.darwinSystem {
+            specialArgs = {
+              inherit inputs outputs;
+            };
+            inherit lib system;
+            modules = commonDarwinModules ++ [
+              {
+                home-manager.users.glitch = import ./machines/${name}/home.nix;
+                nixpkgs.pkgs = import nixpkgs {
+                  inherit overlays system;
+                  config.allowUnfree = true; # free software is for losers
+                };
+              }
+              ./machines/${name}/darwin.nix
+            ];
+          };
       commonNixosModules = with inputs; [
         home-manager.nixosModules.home-manager configureHome
         lanzaboote.nixosModules.lanzaboote

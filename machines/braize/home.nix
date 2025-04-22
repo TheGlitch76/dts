@@ -15,7 +15,8 @@
   };
 
   home.packages = with pkgs; [
-    prismlauncher
+    # https://github.com/NixOS/nixpkgs/pull/400306
+    #prismlauncher # is rebuilding qtdeclarative for no reason
     jetbrains.gateway
   ];
 }

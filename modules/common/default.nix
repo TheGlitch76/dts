@@ -17,7 +17,7 @@
       fish.enable = true;
       #      nushell.enable = true; # just here for fun
     };
-    nixpkgs.config.allowUnfree = true; # free software is for losers
+
     nix = {
       nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
       optimise.automatic = true;
