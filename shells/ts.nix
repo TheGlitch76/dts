@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: pkgs.devshell.mkShell {
+{ lib, pkgs, ... }: pkgs.devshell.mkShell {
   name = "basic typescript";
   packages = with pkgs; [
     nodejs
