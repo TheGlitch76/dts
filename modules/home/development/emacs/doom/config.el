@@ -90,8 +90,12 @@
 (map!
  (:when (modulep! :tools lookup)
    :nv "E" #'+lookup/documentation)
- )
-;; direnv clobbers exec-path (which is appended by nix), this HACK preserves it
+ (:when (modulep! :tools tree-sitter)))
+(after! evil-textobj-tree-sitter
+  (map!
+   :v "u" +tree-sitter-inner-text-objects-map
+   :v "i" #'evil-forward-char))
+; direnv clobbers exec-path (which is appended by nix), this HACK preserves it
 ;;(setenv "PATH" (mapconcat 'identity exec-path ":"))
 
 ;; Variables set by nix, used for envrc-init
