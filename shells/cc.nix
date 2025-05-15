@@ -7,5 +7,7 @@
   name = "cc";
   nativeBuildInputs = with pkgs; [
     clang-tools
+    lldb
+    valgrind
   ];
 }

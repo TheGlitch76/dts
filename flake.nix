@@ -82,8 +82,12 @@
       };
       nixosSystem =
         system: name:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
+        let
+          nixpkgs = nixpkgsForSystem system;
+          lib = (import nixpkgs { inherit overlays system; }).lib;
+        in
+        inputs.nixpkgs.lib.nixosSystem {
+          inherit lib system;
           specialArgs = {
             inherit inputs outputs;
           };
@@ -93,9 +97,10 @@
               {
                 networking.hostName = name;
                 system.stateVersion = stateVersion;
-                nixpkgs.pkgs = import nixpkgs;
-                nixpkgs.overlays = overlays;
-
+                nixpkgs.pkgs = import nixpkgs {
+                  inherit overlays system;
+                  config.allowUnfree = true; # free software is for losers
+                };
                 home-manager.users.glitch = import ./machines/${name}/home.nix;
               }
             )
