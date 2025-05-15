@@ -148,6 +148,7 @@
       nixosConfigurations = {
         lich = nixosSystem "x86_64-linux" "lich";
         lich-wsl = nixosSystem "x86_64-linux" "lich-wsl";
+        aboleth = nixosSystem "x86_64-linux" "aboleth";
       };
       darwinConfigurations = {
         braize = darwinSystem "braize";
