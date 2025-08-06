@@ -6,18 +6,6 @@
 }:
 let
   emacs-pkgs = with pkgs; [
-    binutils
-    ripgrep
-    gnutls
-    imagemagick
-    python3
-    (aspellWithDicts (
-      d: with d; [
-        en
-        en-computers
-        en-science
-      ]
-    ))
   ];
   generate-emacs-pkg = emacs:
     (pkgs.emacsPackagesFor emacs).emacsWithPackages (
@@ -25,8 +13,8 @@ let
       with epkgs;
       [
         vterm
+        treesit-grammars.with-all-grammars
       ]
-      ++ emacs-pkgs
     );
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-basic
@@ -48,26 +36,10 @@ in
     # - i am too lazy to put in a devshell
     home.packages = with pkgs; [
       (generate-emacs-pkg config.glitch.development.emacs.package)
-      # for some reason doom shits the bed if this is wrapped
-      zstd
-      fd
-      tex
-      # tools
-      direnv
-      jj
-      # sh
-      shellcheck
-      bash-language-server
-      shfmt
-      # nix
-      nil
-      nixfmt-rfc-style
-      # rust
-      rustup
     ];
 
     xdg.configFile = {
-      "doom".source = config.lib.file.mkOutOfStoreSymlink "${thisDir}/doom/";
+      "emacs".source = config.lib.file.mkOutOfStoreSymlink "${thisDir}/config/";
     };
     home.sessionPath = [ "${config.xdg.configHome}/emacs/bin/" ];
     home.sessionVariables = {
