@@ -63,7 +63,8 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
-   '("?" . meow-cheatsheet))
+   '("?" . meow-cheatsheet)
+   '("SPC" . "C-x p f"))
   (meow-normal-define-key
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
@@ -131,29 +132,16 @@
   :config (meow-setup)
   :init (meow-global-mode 1))
 
-(use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-one t))
-(use-package solaire-mode
-  :ensure t
-  :init
-  (solaire-global-mode +1))
-(use-package doom-modeline
-  :ensure t
-  :init
-  (doom-modeline-mode 1))
-(add-to-list 'default-frame-alist
-	     '(font . (font-spec :family "MesloLGLDZ Nerd Font")))
 
-;;(setq inhibit-startup-message t)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(setq visible-bell t)
+;;; loading shit
+(defun glitch/load-modules (mods)
+  (dolist (element mods nil)
+    (load (expand-file-name (concat user-emacs-directory (symbol-name element))))))
+
+(glitch/load-modules '(theme))
 
 
-(use-package vertico
-  :ensure t
+(use-package vertico :ensure t
   :init
   (vertico-mode 1))
 (use-package savehist
@@ -174,6 +162,8 @@
 (use-package marginalia
   :ensure t
   :init (marginalia-mode))
+
+
 
 
 ;; langs

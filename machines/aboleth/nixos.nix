@@ -34,5 +34,11 @@
   services.openssh.ports = [ 2269 ];
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server";
+  };
+  system.activationScripts."tailscale-udp-gro-forwarding".text = ''
+    ${pkgs.ethtool}/bin/ethtool -K enp1s0 rx-udp-gro-forwarding on rx-gro-list off
+  '';
 }

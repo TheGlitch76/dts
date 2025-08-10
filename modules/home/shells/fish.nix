@@ -8,6 +8,7 @@
       '';
       shellAbbrs = {
         nos = "sudo nixos-rebuild switch --flake ${config.glitch.dotDir}";
+	abde = "nixos-rebuild switch --flake ${config.glitch.dotDir}#aboleth --target-host aboleth --sudo --ask-sudo-password";
         nds = "darwin-rebuild switch --flake ${config.glitch.dotDir}";
         nfu = "nix flake update";
       };
