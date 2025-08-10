@@ -19,4 +19,4 @@
   :init
   (doom-modeline-mode 1))
 (add-to-list 'default-frame-alist
-	     '(font . (font-spec :family "MesloLGLDZ Nerd Font")))
+	     '(font . "MesloLGLDZ Nerd Font:size=18"))

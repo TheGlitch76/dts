@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+; -*- lexical-binding: t; -*-
 (setq elpaca-core-date '(20250805)) ; TODO
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
@@ -140,14 +140,13 @@
 
 (glitch/load-modules '(theme))
 
-
 (use-package vertico :ensure t
   :init
   (vertico-mode 1))
 (use-package savehist
   :init
   (savehist-mode))
-(use-package emacs
+(use-package emacs :ensure nil
   :custom
   (context-menu-mode t)
   (which-key-mode t)
@@ -162,12 +161,27 @@
 (use-package marginalia
   :ensure t
   :init (marginalia-mode))
-
-
-
-
 ;; langs
 (use-package nix-ts-mode
   :ensure t
   :mode "\\.nix\\'")
 (use-package git-modes :ensure t)
+
+
+;; other
+(use-package dirvish :ensure t :demand t
+  :init
+  (dirvish-override-dired-mode)
+  :custom
+  (dirvish-attributes '(nerd-icons vc-state))
+  :config
+  (dirvish-peek-mode)
+  (dirvish-side-follow-mode)
+  (add-hook 'dired-mode-hook 'dired-omit-mode)
+  :bind
+  (("C-c f" . dirvish)
+   ("C-c s" . dirvish-side)
+   :map dirvish-mode-map
+   ("u" . dired-up-directory)
+   ("TAB" . dirvish-subtree-toggle)))
+(use-package nerd-icons :ensure t) ;; use nerd-icons for dirvish
