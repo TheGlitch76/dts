@@ -64,7 +64,7 @@
 	  CF_SLUG = "monifactory";
 	  CF_FILE_ID = "6741501";
 	  MEMORY = "6G";
-	  JVM_XX_OPTS = "+UseShenandoahGC";
+	  JVM_XX_OPTS = "-XX:+UseShenandoahGC";
 	  UID = "25565";
 	  GID = "25565";
 	};
