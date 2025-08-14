@@ -1,1 +1,1 @@
-https://git.chvp.be/nixos-config/ -
+# moved to https://codeberg.org/theglitch76/dts
