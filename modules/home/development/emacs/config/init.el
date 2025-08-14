@@ -131,8 +131,10 @@
 (use-package meow :ensure (:wait t) :demand t
   :config (meow-setup)
   :init (meow-global-mode 1))
-
-
+(use-package meow-tree-sitter :ensure t
+  :after meow
+  :init
+  (meow-tree-sitter-register-defaults))
 ;;; loading shit
 (defun glitch/load-modules (mods)
   (dolist (element mods nil)
@@ -182,6 +184,16 @@
   (("C-c f" . dirvish)
    ("C-c s" . dirvish-side)
    :map dirvish-mode-map
-   ("u" . dired-up-directory)
-   ("TAB" . dirvish-subtree-toggle)))
+   (("u" . dired-up-directory)
+   ("TAB" . dirvish-subtree-toggle))))
 (use-package nerd-icons :ensure t) ;; use nerd-icons for dirvish
+
+(use-package magit :ensure t
+  :custom
+  (magit-define-global-key-bindings nil)
+  :bind 
+   (("C-x g" . magit-status)
+   ("C-c g g" . magit-dispatch)
+   ("C-c g f" . magit-file-dispatch)))
+(use-package forge :ensure t
+  :after magit)

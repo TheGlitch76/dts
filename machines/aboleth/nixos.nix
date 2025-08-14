@@ -41,4 +41,39 @@
   system.activationScripts."tailscale-udp-gro-forwarding".text = ''
     ${pkgs.ethtool}/bin/ethtool -K enp1s0 rx-udp-gro-forwarding on rx-gro-list off
   '';
+
+  age.secrets."keys/curseforge".file = ../../secrets/keys/curseforge.age;
+
+  users.users.minecraft = {
+    isSystemUser = true;
+    home = "/srv/minecraft";
+    uid = 25565;
+    group = "minecraft";
+  };
+  users.groups.minecraft.gid = 25565;
+  virtualisation.containers.enable = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+    };
+    oci-containers.containers = {
+      moni = {
+	environment = {
+	  EULA = "true";
+	  MOD_PLATFORM = "AUTO_CURSEFORGE";
+	  CF_SLUG = "monifactory";
+	  CF_FILE_ID = "6741501";
+	  MEMORY = "6G";
+	  JVM_XX_OPTS = "+UseShenandoahGC";
+	  UID = "25565";
+	  GID = "25565";
+	};
+	environmentFiles = [ config.age.secrets."keys/curseforge".path ];
+	image = "itzg/minecraft-server:java23";
+	ports = ["0.0.0.0:25565:25565/udp"];
+	volumes = [ "/srv/minecraft/moni/:/data" ];
+      };
+    };
+  };
+  systemd.tmpfiles.rules = [ "d /srv/minecraft/moni 0775 root root -"];
 }

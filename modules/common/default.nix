@@ -12,7 +12,8 @@
   config = {
     home-manager.useGlobalPkgs = true;
     # packages so common i want them literally everywhere
-    environment.systemPackages = with pkgs; [ git ripgrep ];
+    # TODO: put agenix somewhere else
+    environment.systemPackages = with pkgs; [ git ripgrep inputs.agenix.packages.${system}.default ];
     programs = {
       fish.enable = true;
       #      nushell.enable = true; # just here for fun

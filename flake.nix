@@ -7,6 +7,14 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.darwin.follows = "darwin";
+      inputs.home-manager.follows = "home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -130,12 +138,14 @@
             ];
           };
       commonNixosModules = with inputs; [
+	agenix.nixosModules.default
         home-manager.nixosModules.home-manager configureHome
         lanzaboote.nixosModules.lanzaboote
 #        lix-module.nixosModules.default
         ./modules/nixos
       ];
       commonDarwinModules = with inputs; [
+	agenix.darwinModules.default
         home-manager.darwinModules.home-manager configureHome
         mac-app-util.darwinModules.default
         ./modules/darwin
